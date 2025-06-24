@@ -1,22 +1,29 @@
 package com.example.sigeac3.models;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Instructor extends Person{
-    private Integer weekly_workload_hours;
-    private Double hourly_salary;
 
-    public Integer getWeekly_workload_hours() {
-        return weekly_workload_hours;
+    @Column(nullable = false)
+    private String allowedCategories;
+
+    @Column(nullable = false)
+    private String status;
+
+    public String getAllowedCategories() {
+        return allowedCategories;
     }
 
-    public void setWeekly_workload_hours(Integer weekly_workload_hours) {
-        this.weekly_workload_hours = weekly_workload_hours;
+    public void setAllowedCategories(String allowedCategories) {
+        this.allowedCategories = allowedCategories;
     }
 
-    public Double getHourly_salary() {
-        return hourly_salary;
+    public String getStatus() {
+        return status;
     }
 
-    public void setHourly_salary(Double hourly_salary) {
-        this.hourly_salary = hourly_salary;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

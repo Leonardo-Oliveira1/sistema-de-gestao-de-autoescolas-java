@@ -20,6 +20,9 @@ public class Vehicles implements Serializable {
     @Column(nullable = false, unique = true)
     private String licensePlate;
 
+    @Column(nullable = false)
+    private String category;
+
     public String getBrand() {
         return brand;
     }
@@ -50,5 +53,13 @@ public class Vehicles implements Serializable {
 
     public void setLicensePlate(String licensePlate) {
         this.licensePlate = licensePlate;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

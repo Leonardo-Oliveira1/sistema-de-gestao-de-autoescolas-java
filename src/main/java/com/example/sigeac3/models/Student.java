@@ -1,16 +1,32 @@
 package com.example.sigeac3.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+
 import java.time.LocalDateTime;
 
-public class Student extends Person{
+@Entity
+public class Student extends Person {
 
-    private LocalDateTime maximumDateToComplete;
+    @Column(nullable = false)
+    private LocalDateTime registrationDate;
 
-    public LocalDateTime getMaximumDateToComplete() {
-        return maximumDateToComplete;
+    @Column(nullable = false)
+    private String status;
+
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setMaximumDateToComplete(LocalDateTime maximumDateToComplete) {
-        this.maximumDateToComplete = maximumDateToComplete;
+    public void setRegistrationDate(LocalDateTime registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
