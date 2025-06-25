@@ -11,14 +11,20 @@
     <h:body>
         <h1>Cadastro de alunos</h1>
         <h:form>
-            <h:panelGrid colums="1">
-                <h:inputText a:placeholder="Nome"/>
-                <h:inputText a:placeholder="Sobrenome"/>
-                <h:inputText a:placeholder="CPF"/>
-                <h:inputText a:placeholder="Email"/>
-                <h:inputSecret a:placeholder="Senha"/>
-                <p:commandButton type="button" value="Salvar Veículo" styleClass="ui-button-success" action="#{studentController.test}"/>
+            <h:panelGrid columns="1">
+                <h:inputText a:placeholder="Nome" value="#{studentBean.student.name}"/>
+                <h:inputText a:placeholder="Sobrenome" value="#{studentBean.student.lastname}"/>
+                <h:inputText a:placeholder="CPF" value="#{studentBean.student.cpf}"/>
+                <h:inputText a:placeholder="Email" value="#{studentBean.student.email}"/>
+                <h:inputSecret a:placeholder="Senha" value="#{studentBean.student.password}"/>
+                <p:commandButton value="Cadastrar"
+                                 styleClass="ui-button-success"
+                                 action="#{studentBean.save}"
+                                 process="@form"
+                                 update="mensagens"
+                                 ajax="true" />
             </h:panelGrid>
+            <p:messages id="mensagens" globalOnly="true" showDetail="true" showSummary="true" closable="true" />
         </h:form>
     </h:body>
 </html>

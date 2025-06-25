@@ -5,7 +5,6 @@
              version="3.2">
     <persistence-unit name="default">
         <jta-data-source>java:/PostgresDS</jta-data-source>
-        <class>com.example.sigeac3.models.Vehicles</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
