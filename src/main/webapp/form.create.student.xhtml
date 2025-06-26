@@ -1,0 +1,45 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+
+<h:head>
+    <title>Cadastro de Aluno</title>
+</h:head>
+
+<h:body>
+    <div class="card">
+        <h:form>
+            <h1>Cadastro de alunos</h1>
+            <h:panelGrid cellpadding="7" id="grid">
+                <p:outputLabel for="@next" value="Nome:"/>
+                <p:inputText id="name" value="#{studentBean.student.name}"/>
+                <p:message for="@previous"/>
+
+                <p:outputLabel for="@next" value="Sobrenome:"/>
+                <p:inputText required="true" value="#{studentBean.student.lastname}"/>
+                <p:message for="@previous"/>
+
+                <p:outputLabel for="@next" value="CPF:"/>
+                <p:inputText required="true" value="#{studentBean.student.cpf}"/>
+                <p:message for="@previous"/>
+
+                <p:outputLabel for="@next" value="E-mail:"/>
+                <p:inputText required="true" value="#{studentBean.student.email}"/>
+                <p:message for="@previous"/>
+
+                <p:outputLabel for="@next" value="Senha:"/>
+                <h:inputSecret required="true" value="#{studentBean.student.password}"/>
+                <p:message for="@previous"/>
+
+                <p:commandButton value="Cadastrar"
+                                 styleClass="ui-button-success"
+                                 action="#{studentBean.save}"
+                                 process="@form"
+                                 update="grid"
+                                 ajax="true" />
+                <p:messages id="mensagens" globalOnly="true" showDetail="true" showSummary="true" closable="true" />
+            </h:panelGrid>
+        </h:form>
+    </div>
+</h:body>
+</html>

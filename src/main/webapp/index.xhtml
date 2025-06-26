@@ -5,26 +5,147 @@
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
     <h:head>
-        <title>Cadastro de Veículo</title>
+        <title>Listagem de alunos</title>
     </h:head>
 
     <h:body>
-        <h1>Cadastro de alunos</h1>
-        <h:form>
-            <h:panelGrid columns="1">
-                <h:inputText a:placeholder="Nome" value="#{studentBean.student.name}"/>
-                <h:inputText a:placeholder="Sobrenome" value="#{studentBean.student.lastname}"/>
-                <h:inputText a:placeholder="CPF" value="#{studentBean.student.cpf}"/>
-                <h:inputText a:placeholder="Email" value="#{studentBean.student.email}"/>
-                <h:inputSecret a:placeholder="Senha" value="#{studentBean.student.password}"/>
-                <p:commandButton value="Cadastrar"
-                                 styleClass="ui-button-success"
-                                 action="#{studentBean.save}"
-                                 process="@form"
-                                 update="mensagens"
-                                 ajax="true" />
-            </h:panelGrid>
-            <p:messages id="mensagens" globalOnly="true" showDetail="true" showSummary="true" closable="true" />
-        </h:form>
+        <div class="card crud-demo">
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true" />
+
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:commandButton value="New" icon="pi pi-plus" actionListener="#{crudView.openNew}"
+                                         update=":dialogs:manage-product-content" oncomplete="PF('manageProductDialog').show()"
+                                         styleClass="ui-button-success" style="margin-right: .5rem">
+                            <p:resetInput target=":dialogs:manage-product-content" />
+                        </p:commandButton>
+                        <p:commandButton id="delete-products-button" value="#{crudView.deleteButtonMessage}"
+                                         icon="pi pi-trash" actionListener="#{crudView.deleteSelectedProducts}"
+                                         styleClass="ui-button-danger" disabled="#{!crudView.hasSelectedProducts()}" update="@this">
+                            <p:confirm header="Confirmation" message="Delete the selected products?"
+                                       icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:dataTable id="dt-products" widgetVar="dtProducts" var="student" value="#{studentBean.students}"
+                             reflow="true" styleClass="products-table" selectionMode="multiple" selection="#{crudView.selectedProducts}"
+                             rowKey="#{product.code}" paginator="true" rows="10" selectionRowMode="add" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <div class="products-table-header">
+                            <span style="font-weight: bold">PRODUCTS</span>
+                            <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                        <p:inputText id="globalFilter" onkeyup="PrimeFaces.debounce(() => PF('dtProducts').filter())" placeholder="Search" />
+                    </span>
+                        </div>
+                    </f:facet>
+
+                    <p:ajax event="rowSelect" update=":form:delete-products-button" />
+                    <p:ajax event="rowUnselect" update=":form:delete-products-button" />
+                    <p:ajax event="rowSelectCheckbox" update=":form:delete-products-button" />
+                    <p:ajax event="rowUnselectCheckbox" update=":form:delete-products-button" />
+                    <p:ajax event="toggleSelect" update=":form:delete-products-button" />
+
+                    <p:column selectionBox="true" exportable="false"></p:column>
+
+                    <p:column headerText="CPF" sortBy="#{student.cpf}" filterBy="#{student.cpf}">
+                        <h:outputText value="#{student.cpf}" />
+                    </p:column>
+                    <p:column headerText="Name" sortBy="#{student.name}" filterBy="#{student.name}">
+                        <h:outputText value="#{student.name}" />
+                    </p:column>
+                    <p:column headerText="Lastname" sortBy="#{student.lastname}" filterBy="#{student.lastname}">
+                        <h:outputText value="#{student.lastname}" />
+                    </p:column>
+                    <p:column headerText="Registration Date" sortBy="#{student.registrationDate}" filterBy="#{student.registrationDate}">
+                        <h:outputText value="#{student.registrationDate}" />
+                    </p:column>
+                    <p:column headerText="Status" sortBy="#{student.status}" filterBy="#{student.status}">
+                        <p:tag value="#{student.status}"
+                               severity="#{student.status == 'ATIVO' ? 'success' :
+                        student.status == 'CONCLUIDO' ? 'info' :
+                        'warning'}" />
+                    </p:column>
+                    <p:column exportable="false" ariaHeaderText="Actions">
+                        <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-product-content"
+                                         oncomplete="PF('manageProductDialog').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
+                            <f:setPropertyActionListener value="#{product}" target="#{crudView.selectedProduct}" />
+                            <p:resetInput target=":dialogs:manage-product-content" />
+                        </p:commandButton>
+                        <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+                                         process="@this"
+                                         oncomplete="PF('deleteProductDialog').show()">
+                            <f:setPropertyActionListener value="#{product}" target="#{crudView.selectedProduct}" />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="dialogs">
+                <p:dialog header="Cadastrar aluno" showEffect="fade" modal="true" widgetVar="manageProductDialog"
+                          responsive="true">
+                    <p:outputPanel id="manage-product-content" class="ui-fluid">
+                        <p:outputPanel>
+                            <p:graphicImage name="images/product/#{crudView.selectedProduct.image}" library="demo"
+                                            styleClass="product-image" rendered="#{not empty crudView.selectedProduct.image}" />
+                            <div class="field">
+                                <p:outputLabel for="name">Name</p:outputLabel>
+                                <p:inputText id="name" value="#{crudView.selectedProduct.name}" required="true" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="description">Description</p:outputLabel>
+                                <p:inputTextarea id="description" value="#{crudView.selectedProduct.description}" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="category">Category</p:outputLabel>
+                                <p:selectOneRadio id="category" value="#{crudView.selectedProduct.category}"
+                                                  layout="responsive" columns="2">
+                                    <f:selectItem itemLabel="Accessories" itemValue="Accessories" />
+                                    <f:selectItem itemLabel="Clothing" itemValue="Clothing" />
+                                    <f:selectItem itemLabel="Electronics" itemValue="Electronics" />
+                                    <f:selectItem itemLabel="Fitness" itemValue="Fitness" />
+                                </p:selectOneRadio>
+                            </div>
+                            <div class="formgrid grid">
+                                <div class="field col">
+                                    <p:outputLabel for="price">Price</p:outputLabel>
+                                    <p:inputNumber id="price" value="#{crudView.selectedProduct.price}" symbol=" USD"
+                                                   symbolPosition="s" decimalSeparator="." thousandSeparator="," />
+                                </div>
+                                <div class="field col">
+                                    <p:outputLabel for="quantity">Quantity</p:outputLabel>
+                                    <p:spinner id="quantity" min="0" value="#{crudView.selectedProduct.quantity}" />
+                                </div>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Save" icon="pi pi-check" actionListener="#{crudView.saveProduct}"
+                                         update="manage-product-content" process="manage-product-content @this" />
+                        <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+                                         class="ui-button-secondary" type="button" />
+                    </f:facet>
+                </p:dialog>
+
+                <p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade" width="300"
+                                 message="Delete the product?" header="Confirm" severity="warn">
+                    <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{crudView.deleteProduct}"
+                                     process="@this" update=":form:delete-products-button"
+                                     oncomplete="PF('deleteProductDialog').hide()" />
+                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                     onclick="PF('deleteProductDialog').hide()" />
+                </p:confirmDialog>
+
+                <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                     icon="pi pi-times" />
+                </p:confirmDialog>
+            </h:form>
+        </div>
     </h:body>
 </html>

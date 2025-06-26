@@ -5,6 +5,8 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import java.util.List;
+
 @Stateless
 public class StudentDAO {
 
@@ -14,4 +16,9 @@ public class StudentDAO {
     public void save(Student student) {
         em.persist(student);
     }
+
+    public List<Student> findAll() {
+        return em.createQuery("SELECT s FROM Student s", Student.class).getResultList();
+    }
+
 }
