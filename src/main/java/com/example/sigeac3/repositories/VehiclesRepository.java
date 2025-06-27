@@ -1,12 +1,12 @@
-package com.example.sigeac3.repository;
+package com.example.sigeac3.repositories;
 
-import com.example.sigeac3.models.Vehicles;
+import com.example.sigeac3.entities.Vehicles;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 @Stateless
-public class VehiclesDAO {
+public class VehiclesRepository {
 
     @PersistenceContext
     private EntityManager em;

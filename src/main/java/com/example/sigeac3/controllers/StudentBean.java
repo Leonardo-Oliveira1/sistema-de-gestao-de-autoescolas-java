@@ -1,9 +1,10 @@
 package com.example.sigeac3.controllers;
 
-import com.example.sigeac3.models.Student;
-import com.example.sigeac3.repository.StudentDAO;
+import com.example.sigeac3.entities.Student;
+import com.example.sigeac3.repositories.StudentRepository;
+import com.example.sigeac3.services.StudentService;
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
@@ -13,41 +14,33 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Named
-@RequestScoped
+@ApplicationScoped
 public class StudentBean {
 
-    private Student student = new Student();
+    @Inject
+    private StudentRepository studentRepository;
 
     @Inject
-    private StudentDAO studentDAO;
-
-    private List<Student> students;
+    private StudentService studentService;
 
     @PostConstruct
     public void init() {
-        students = studentDAO.findAll();
+        students = studentService.findAll();
     }
+
+    private List<Student> students;
 
     public List<Student> getStudents() {
         return students;
     }
 
+    private Student student = new Student();
 
     public void save() {
         try {
             student.setRegistrationDate(LocalDateTime.now());
             student.setStatus("ATIVO");
-
-            if(student.getName() == null || student.getName().trim().isEmpty()
-                    || student.getLastname() == null | student.getLastname().trim().isEmpty()
-                    || student.getCpf() == null || student.getCpf().trim().isEmpty()
-                    ||  student.getEmail() == null || student.getEmail().trim().isEmpty()
-                    || student.getPassword() == null || student.getPassword().trim().isEmpty()
-            ){
-                throw new Exception("Por favor, preencha todos os campos");
-            }
-
-            studentDAO.save(student);
+            studentService.save(student);
 
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso:", "Aluno cadastrado com sucesso."));

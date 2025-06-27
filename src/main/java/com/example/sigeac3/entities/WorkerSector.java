@@ -1,4 +1,4 @@
-package com.example.sigeac3.models;
+package com.example.sigeac3.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;

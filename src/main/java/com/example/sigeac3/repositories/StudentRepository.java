@@ -1,6 +1,6 @@
-package com.example.sigeac3.repository;
+package com.example.sigeac3.repositories;
 
-import com.example.sigeac3.models.Student;
+import com.example.sigeac3.entities.Student;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -8,7 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import java.util.List;
 
 @Stateless
-public class StudentDAO {
+public class StudentRepository {
 
     @PersistenceContext
     private EntityManager em;
